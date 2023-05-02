@@ -1,11 +1,12 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
-import styles from '@/styles/Home.module.css'
-
-const inter = Inter({ subsets: ['latin'] })
-
-export default function Home() {
+import Head from "next/head";
+import classes from "../styles/Home.module.css";
+import { getSession, signIn, signOut, useSession } from "next-auth/react";
+import Image from "next/image";
+import { useRouter } from "next/router";
+export default function Home(props) {
+  const { data: session } = useSession();
+  const router = useRouter();
+  console.log(session);
   return (
     <>
       <Head>
@@ -14,101 +15,54 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={`${styles.main} ${inter.className}`}>
-        <div className={styles.description}>
-          <p>
-            Get started by editing&nbsp;
-            <code className={styles.code}>pages/index.js</code>
-          </p>
-          <div>
-            <a
-              href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              By{' '}
-              <Image
-                src="/vercel.svg"
-                alt="Vercel Logo"
-                className={styles.vercelLogo}
-                width={100}
-                height={24}
-                priority
-              />
-            </a>
+      <div>
+        {session ? (
+          <div className={classes.main}>
+            <h1>Hello {session.user.name}! How are you?</h1>
+            <Image
+              src={session.user.image}
+              width={150}
+              height={150}
+              alt={session.user.name}
+              unoptimized
+            />
+            <button className={classes.button} onClick={signOut}>
+              logout
+            </button>
           </div>
-        </div>
-
-        <div className={styles.center}>
-          <Image
-            className={styles.logo}
-            src="/next.svg"
-            alt="Next.js Logo"
-            width={180}
-            height={37}
-            priority
-          />
-        </div>
-
-        <div className={styles.grid}>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2>
-              Docs <span>-&gt;</span>
-            </h2>
-            <p>
-              Find in-depth information about Next.js features and&nbsp;API.
-            </p>
-          </a>
-
-          <a
-            href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2>
-              Learn <span>-&gt;</span>
-            </h2>
-            <p>
-              Learn about Next.js in an interactive course with&nbsp;quizzes!
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2>
-              Templates <span>-&gt;</span>
-            </h2>
-            <p>
-              Discover and deploy boilerplate example Next.js&nbsp;projects.
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2>
-              Deploy <span>-&gt;</span>
-            </h2>
-            <p>
-              Instantly deploy your Next.js site to a shareable URL
-              with&nbsp;Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
+        ) : (
+          <div className={classes.main}>
+            <h1>
+              hello guest! click on the button to log in with your google
+              account
+            </h1>
+            <button
+              className={classes.button}
+              onClick={() => router.push("./signin")}
+            >
+              SIgn In
+            </button>
+          </div>
+        )}
+      </div>
     </>
-  )
+  );
 }
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+  return {
+    props: {
+      session,
+    },
+  };
+}
+
+// expires: "2023-06-01T07:08:38.716Z"
+// ​
+// user: Object { name: "Manepalli Venkata Raju", email: "manepalli.venkata@terralogic.com", image: "https://lh3.googleusercontent.com/a/AGNmyxZDq7HM7zCVSPPEND1_RZ7viH3qJ5-h7wZu33t9=s96-c" }
+// ​​
+// email: "manepalli.venkata@terralogic.com"
+// ​​
+// image: "https://lh3.googleusercontent.com/a/AGNmyxZDq7HM7zCVSPPEND1_RZ7viH3qJ5-h7wZu33t9=s96-c"
+// ​​
+// name: "Manepalli Venkata Raju"
