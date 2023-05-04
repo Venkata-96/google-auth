@@ -56,13 +56,3 @@ export async function getServerSideProps(context) {
     },
   };
 }
-
-// expires: "2023-06-01T07:08:38.716Z"
-// ​
-// user: Object { name: "Manepalli Venkata Raju", email: "manepalli.venkata@terralogic.com", image: "https://lh3.googleusercontent.com/a/AGNmyxZDq7HM7zCVSPPEND1_RZ7viH3qJ5-h7wZu33t9=s96-c" }
-// ​​
-// email: "manepalli.venkata@terralogic.com"
-// ​​
-// image: "https://lh3.googleusercontent.com/a/AGNmyxZDq7HM7zCVSPPEND1_RZ7viH3qJ5-h7wZu33t9=s96-c"
-// ​​
-// name: "Manepalli Venkata Raju"

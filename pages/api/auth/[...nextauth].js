@@ -1,6 +1,7 @@
 import NextAuth from 'next-auth';
 import GoogleProvider from "next-auth/providers/google";
 import { client_id, client_secret } from '../hello';
+
 export default NextAuth({
   providers: [
     GoogleProvider({
@@ -8,5 +9,7 @@ export default NextAuth({
       clientSecret: client_secret,
     }),
   ],
-//   secret:process.env.JWT_SECRET
+  session: {
+    maxAge: 5 * 24 * 60 * 60, 
+  },
 });
